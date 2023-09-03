@@ -8,7 +8,7 @@ const SubTaskSchema = new Schema({
     },
     taskid:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Tasks'
+        ref:'task'
     },
     title:{
         type:String,
@@ -28,4 +28,6 @@ const SubTaskSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model("subtask", SubTaskSchema);
+const SubTask = mongoose.model("subtask", SubTaskSchema);
+SubTask.createIndexes();
+module.exports = SubTask;

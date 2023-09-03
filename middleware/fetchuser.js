@@ -6,7 +6,7 @@ const fetchuser = (req, res, next)=>
     const token = req.header('authToken')
     if(!token)
     {
-        res.status(401).send({error:"Please authenticate with valid credentials"});
+        return res.status(401).send({error:"Please authenticate with valid credentials"});
     }
     try
     {

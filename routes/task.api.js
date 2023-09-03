@@ -37,7 +37,7 @@ try{
         
     })
 
-    //fetching all tasks login required
+    //fetching all tasks login required // Yet to modify for aggregate
     router.get("/viewtasks", fetchuser, async(req, res) =>{
         try{
         let uid = req.user.id;
@@ -95,15 +95,7 @@ router.put("/updatetask", fetchuser, async(req, res)=>{
         {
             return res.status(400).send("The note doesn't belong to you. It can't be deleted");
         }
-        let taskStatus = task.status;
-        let newStatus = ""
-        if(taskStatus === "pending")
-        {
-            newStatus = "completed"
-        }
-        else{
-            newStatus = "pending";
-        }
+        let newStatus = req.body.status;
         task = await Task.findByIdAndUpdate(taskid, {$set: {status:newStatus}}, {new:true} );
         return res.status(200).send("Task's status updated successfully");
     }
