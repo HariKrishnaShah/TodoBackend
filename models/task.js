@@ -15,7 +15,7 @@ const taskSchema = new Schema({
         required:true,
         enum:["pending", "completed"],
     },
-    CreatedDate:{
+    createdDate:{
         type:Date,
         default:Date.now()
     },
@@ -24,6 +24,6 @@ const taskSchema = new Schema({
     }
 });
 
-const Task = mongoose.model("user", taskSchema);
+const Task = mongoose.model("task", taskSchema);
 Task.createIndexes();
 module.exports = Task;

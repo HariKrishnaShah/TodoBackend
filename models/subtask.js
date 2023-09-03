@@ -19,7 +19,7 @@ const SubTaskSchema = new Schema({
         required:true,
         enum:["pending", "completed"],
     },
-    CreatedDate:{
+    createdDate:{
         type:Date,
         default:Date.now()
     },
@@ -28,4 +28,4 @@ const SubTaskSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model("Subtask", SubTaskSchema);
+module.exports = mongoose.model("subtask", SubTaskSchema);

@@ -12,8 +12,6 @@ try{
       body('name', "Enter a valid name").isLength({min:3}),
       body('email', "Enter a valid mail").isEmail(),
       body('password', "Password must be atleast 3 characters").isLength({min:3}),
-  
-  
   ], async(req, res)=>{
         const result = validationResult(req); 
         console.log("Error result is " + result);
@@ -86,7 +84,15 @@ router.post('/login',[
       {
         let userId = req.user.id;
         const user = await User.findById(userId).select("-password");
-        res.json(user)
+        if(user)
+        {
+          res.json(user)
+        }
+        else
+        {
+          res.status(404).send("Please Login with valid credentails")
+        }
+        
       }
       catch(error){
         console.log(error.message);
