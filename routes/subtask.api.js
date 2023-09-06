@@ -92,6 +92,7 @@ router.put("/updatesubtask", fetchuser, async(req, res)=>{
     try{
         let uid = req.user.id;
         let subtaskid = req.body.subtaskid;
+        let markasdone = req.body.markasdone;
         let subtask = await SubTask.findById(subtaskid);
         //Check if task exist
         if(!subtask)
@@ -103,7 +104,19 @@ router.put("/updatesubtask", fetchuser, async(req, res)=>{
         {
             return res.status(400).send("The subtask doesn't belong to you. It can't be deleted");
         }
-        let newStatus = req.body.status;
+        let newStatus;
+        if(subtask.status === "completed")
+        {
+            newStatus = "pending"
+        }
+        else if(subtask.status === "pending")
+        {
+            newStatus = "completed";
+        }
+        if(markasdone && markasdone ==="yes")
+        {
+            newStatus = "completed";
+        }
         subtask = await SubTask.findByIdAndUpdate(subtaskid, {$set: {status:newStatus}}, {new:true} );
         return res.status(200).send("Task's status updated successfully");
     }
@@ -111,8 +124,6 @@ router.put("/updatesubtask", fetchuser, async(req, res)=>{
     {
         res.status(500).send({error: "Internal error occured"});
     }
-    
-
 })
 
 }

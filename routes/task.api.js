@@ -40,8 +40,22 @@ try{
     //fetching all tasks login required // Yet to modify for aggregate
     router.get("/viewtasks", fetchuser, async(req, res) =>{
         try{
-        let uid = req.user.id;
-        let tasks = await Task.find({userid:uid});
+        let uid = (req.user.id).toString();
+        console.log(uid);
+        let tasks = await Task.aggregate(
+            [
+                { $match: { $expr : { $eq: [ '$userid' , { $toObjectId: uid } ] } } },
+                {
+                    $lookup:{
+                        from: "subtasks",
+                        localField: "_id",
+                        foreignField: "taskid",
+                        as:"subtasks"
+                    }
+                }
+            ]    
+        );
+        console.log(tasks);
         res.json(tasks);
     }
     catch(error)
@@ -95,7 +109,15 @@ router.put("/updatetask", fetchuser, async(req, res)=>{
         {
             return res.status(400).send("The note doesn't belong to you. It can't be deleted");
         }
-        let newStatus = req.body.status;
+        let newStatus;
+        if(task.status === "completed")
+        {
+            newStatus = "pending"
+        }
+        else if(task.status === "pending")
+        {
+            newStatus = "completed";
+        }
         task = await Task.findByIdAndUpdate(taskid, {$set: {status:newStatus}}, {new:true} );
         return res.status(200).send("Task's status updated successfully");
     }
