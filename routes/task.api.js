@@ -26,7 +26,7 @@ try{
                     title:req.body.title,
                     description:req.body.description
                 });
-                return res.json(task + "Task added sucessfully");
+                return res.json(task);
             }
             return res.status(400).json({success, error:"Please Enter valid credentails."});
         }

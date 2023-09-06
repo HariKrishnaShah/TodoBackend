@@ -20,7 +20,7 @@ try{
              let user = await User.findOne({email:req.body.email});
         if(user)
         {
-        return res.status(400).json({success, error:"Sorry ! an user already exists with that email. Enter another email and try again."});
+        return res.status(400).json({success:false, error:"Sorry ! an user already exists with that email. Enter another email and try again."});
         }
             var salt = await bcrypt.genSalt();
             const secret_password = await bcrypt.hash(req.body.password, salt);
@@ -33,7 +33,7 @@ try{
             const userdata = {user:{id:user.id}};
             success = true;
             const authToken = jwt.sign(userdata, jwtSecretKey);
-            return res.json({"success": success, "authtoken": authToken, "userdetails": user})
+            return res.json({"success": true, "authtoken": authToken, "userdetails": user})
         }
         res.send({ errors: result.array() });
     })
@@ -47,7 +47,7 @@ router.post('/login',[
     const result = validationResult(req); 
     if (!result.isEmpty()) {
   
-        return res.status(400).json({"success":success, errors:result.array()});
+        return res.status(400).json({"success":false, errors:result.array()});
       }
   
       const {email, password} = req.body;
@@ -56,12 +56,12 @@ router.post('/login',[
         let user = await User.findOne({email:email})
         if(!user)
         {
-          return res.status(400).json({"success":success, error:"Please try again with correct credentials."});
+          return res.status(400).json({"success":false, error:"Please try again with correct credentials."});
         }
         const passwordCompare = await bcrypt.compare(password, user.password);
         if(!passwordCompare)
         {
-          return res.status(400).json({"success":success, error:"Please try again with correct credentials."})
+          return res.status(400).json({"success":false, error:"Please try again with correct credentials."})
         }
   
         const data = {
@@ -71,7 +71,7 @@ router.post('/login',[
         }
         const authToken = jwt.sign(data, jwtSecretKey);
         success = true;
-        res.json({"success":success, "authToken":authToken})
+        res.json({"success":true, "authToken":authToken})
       }
       catch(error){
         console.log(error.message);
