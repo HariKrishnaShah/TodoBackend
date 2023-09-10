@@ -3,12 +3,7 @@ const router = express.Router();
 const User = require("../models/user.js");
 const Task = require("../models/task.js");
 const SubTask = require("../models/subtask.js")
-const { body, validationResult } = require('express-validator');
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const fetchuser = require("../middleware/fetchuser.js");
-const jwtSecretKey = "IamHari";
-let success = false;
 
 
 try{
@@ -35,7 +30,7 @@ try{
                     title:req.body.title,
                     description:req.body.description
                 });
-                return res.json("SubTask added sucessfully");
+                return res.json(subtask);
         }
         catch(error)
         {
